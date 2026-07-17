@@ -18,6 +18,7 @@
     />
     <style>
 :root{
+  color-scheme: light;
   --bg: #F6F3EC;
   --panel: #FFFFFF;
   --panel-2: #F2EEE4;
@@ -95,7 +96,7 @@ body{
 .stat-card.accent .num{ color: var(--copper); }
 .stat-card.warn .num{ color: var(--warn); }
 .stat-card.bad .num{ color: var(--bad); }
-
+ 
 .toolbar{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -113,7 +114,7 @@ body{
   box-shadow: 0 0 0 0.2rem rgba(122,30,40,0.15);
 }
 .form-control::placeholder{ color: var(--ink-dim); }
-
+ 
 .btn-copper{
   background: var(--gold);
   border-color: var(--gold);
@@ -134,14 +135,14 @@ body{
   color: #14161B;
   border-color: var(--copper);
 }
-
+ 
 .bench-table{
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 6px;
   overflow: hidden;
 }
-.bench-table table{ margin-bottom: 0; }
+.bench-table table{ margin-bottom: 0; background: var(--panel); }
 .bench-table thead th{
   background: var(--panel-2);
   color: var(--ink-dim);
@@ -153,15 +154,17 @@ body{
   font-weight: 600;
   padding: 0.7rem 0.9rem;
 }
+.bench-table tbody tr{ background: var(--panel); }
 .bench-table tbody td{
+  background: var(--panel);
   border-bottom: 1px solid var(--line);
   padding: 0.65rem 0.9rem;
   vertical-align: middle;
   color: var(--ink);
 }
 .bench-table tbody tr:last-child td{ border-bottom: none; }
-.bench-table tbody tr:hover{ background: rgba(255,255,255,0.02); }
-
+.bench-table tbody tr:hover td{ background: var(--panel-2); }
+ 
 .ref-badge{
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
@@ -209,7 +212,7 @@ body{
 }
 .qty-btn:hover{ border-color: var(--copper-dim); color: var(--copper); }
 .qty-val{ min-width: 2ch; text-align: center; font-weight: 700; }
-
+ 
 .status-dot{
   width: 8px; height: 8px;
   border-radius: 50%;
@@ -223,7 +226,7 @@ body{
 .status-ok .status-text{ color: var(--ok); }
 .status-low .status-text{ color: var(--warn); }
 .status-out .status-text{ color: var(--bad); }
-
+ 
 .row-actions .btn{
   color: var(--ink-dim);
   border: none;
@@ -231,7 +234,7 @@ body{
   padding: 0.2rem 0.4rem;
 }
 .row-actions .btn:hover{ color: var(--copper); }
-
+ 
 .modal-content{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -244,14 +247,14 @@ body{
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-
+ 
 .empty-state{
   text-align: center;
   padding: 3.5rem 1rem;
   color: var(--ink-dim);
 }
 .empty-state i{ font-size: 2rem; color: var(--copper-dim); }
-
+ 
 .type-pill{
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
@@ -271,11 +274,11 @@ body{
   background: rgba(232,163,61,0.12);
   border: 1px solid rgba(232,163,61,0.3);
 }
-
+ 
 .form-check-label{ color: var(--ink); font-size: 0.9rem; }
 .form-check-input{ background-color: var(--panel-2); border-color: var(--line); }
 .form-check-input:checked{ background-color: var(--copper); border-color: var(--copper); }
-
+ 
 .loans-section{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -300,16 +303,19 @@ body{
   font-size: 0.75rem;
   color: var(--ink-dim);
 }
+.loan-row{ background: var(--panel); }
 .loan-row td{
+  background: var(--panel);
   border-bottom: 1px solid var(--line);
   padding: 0.6rem 0.9rem;
   vertical-align: middle;
   font-size: 0.85rem;
+  color: var(--ink);
 }
 .loan-row:last-child td{ border-bottom: none; }
 .loan-borrower{ font-weight: 600; }
 .loan-date{ color: var(--ink-dim); font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
-
+ 
 .admin-only{ display: none; }
 body.is-admin .admin-only{ display: inline-flex; }
 body.is-admin .admin-only.d-block-admin{ display: block; }
@@ -338,7 +344,7 @@ body.is-admin .admin-badge{ display: inline-flex; }
   gap: 0.3rem;
 }
 body.is-admin .viewer-badge{ display: none; }
-
+ 
 ::-webkit-scrollbar{ height: 8px; width: 8px; }
 ::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 4px; }
     </style>
