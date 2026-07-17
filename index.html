@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Parts Bench — Arduino Inventory</title>
+    <title>RobKit — Arduino Inventory</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,395 +17,330 @@
       rel="stylesheet"
     />
     <style>
-      :root {
-        --bg: #14161b;
-        --panel: #1d2027;
-        --panel-2: #23262f;
-        --line: #2e323c;
-        --copper: #c9803d;
-        --copper-dim: #8a5b2c;
-        --ink: #e8e6e1;
-        --ink-dim: #8b8e98;
-        --ok: #7fb069;
-        --warn: #e8a33d;
-        --bad: #d6605a;
-      }
-      body {
-        background: var(--bg);
-        color: var(--ink);
-        font-family: "Space Grotesk", sans-serif;
-        min-height: 100vh;
-      }
-      .mono {
-        font-family: "JetBrains Mono", monospace;
-      }
-      .topbar {
-        border-bottom: 1px solid var(--line);
-        background: var(--panel);
-      }
-      .topbar h1 {
-        font-weight: 700;
-        letter-spacing: 0.02em;
-        font-size: 1.4rem;
-        margin: 0;
-      }
-      .topbar .tagline {
-        color: var(--ink-dim);
-        font-size: 0.8rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .stat-card {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        padding: 0.9rem 1.1rem;
-      }
-      .stat-card .num {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: var(--ink);
-        line-height: 1;
-      }
-      .stat-card .lbl {
-        color: var(--ink-dim);
-        font-size: 0.72rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        margin-top: 0.3rem;
-      }
-      .stat-card.accent .num {
-        color: var(--copper);
-      }
-      .stat-card.warn .num {
-        color: var(--warn);
-      }
-      .stat-card.bad .num {
-        color: var(--bad);
-      }
+:root{
+  --bg: #F6F3EC;
+  --panel: #FFFFFF;
+  --panel-2: #F2EEE4;
+  --line: #E3DCC9;
+  --copper: #7A1E28;
+  --copper-dim: #A8434B;
+  --gold: #F2C230;
+  --gold-dark: #7A5A06;
+  --ink: #241014;
+  --ink-dim: #746A61;
+  --ok: #2E7D46;
+  --warn: #B76E12;
+  --bad: #B3261E;
+}
+body{
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Space Grotesk', sans-serif;
+  min-height: 100vh;
+}
+.mono{ font-family: 'JetBrains Mono', monospace; }
+.topbar{
+  border-bottom: 3px solid var(--gold);
+  background: var(--copper);
+}
+.topbar h1{
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-size: 1.4rem;
+  margin: 0;
+  color: #FFFFFF;
+}
+.topbar .tagline{
+  color: rgba(255,255,255,0.75);
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.topbar .viewer-badge{
+  border-color: rgba(255,255,255,0.35);
+  color: rgba(255,255,255,0.85);
+}
+.topbar .admin-badge{
+  border-color: rgba(242,194,48,0.5);
+  background: rgba(242,194,48,0.15);
+  color: var(--gold);
+}
+.topbar .btn-outline-copper{
+  border-color: rgba(255,255,255,0.5);
+  color: #FFFFFF;
+}
+.topbar .btn-outline-copper:hover{
+  background: rgba(255,255,255,0.12);
+  color: #FFFFFF;
+}
+.stat-card{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+}
+.stat-card .num{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+.stat-card .lbl{
+  color: var(--ink-dim);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.3rem;
+}
+.stat-card.accent .num{ color: var(--copper); }
+.stat-card.warn .num{ color: var(--warn); }
+.stat-card.bad .num{ color: var(--bad); }
 
-      .toolbar {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-      }
-      .form-control,
-      .form-select {
-        background: var(--panel-2);
-        border: 1px solid var(--line);
-        color: var(--ink);
-      }
-      .form-control:focus,
-      .form-select:focus {
-        background: var(--panel-2);
-        color: var(--ink);
-        border-color: var(--copper-dim);
-        box-shadow: 0 0 0 0.2rem rgba(201, 128, 61, 0.15);
-      }
-      .form-control::placeholder {
-        color: var(--ink-dim);
-      }
+.toolbar{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.form-control, .form-select{
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.form-control:focus, .form-select:focus{
+  background: var(--panel-2);
+  color: var(--ink);
+  border-color: var(--copper-dim);
+  box-shadow: 0 0 0 0.2rem rgba(122,30,40,0.15);
+}
+.form-control::placeholder{ color: var(--ink-dim); }
 
-      .btn-copper {
-        background: var(--copper);
-        border-color: var(--copper);
-        color: #14161b;
-        font-weight: 600;
-      }
-      .btn-copper:hover {
-        background: #dc9250;
-        border-color: #dc9250;
-        color: #14161b;
-      }
-      .btn-outline-copper {
-        border-color: var(--copper-dim);
-        color: var(--copper);
-      }
-      .btn-outline-copper:hover {
-        background: var(--copper);
-        color: #14161b;
-        border-color: var(--copper);
-      }
+.btn-copper{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--gold-dark);
+  font-weight: 700;
+}
+.btn-copper:hover{
+  background: #f7cf5c;
+  border-color: #f7cf5c;
+  color: var(--gold-dark);
+}
+.btn-outline-copper{
+  border-color: var(--copper-dim);
+  color: var(--copper);
+}
+.btn-outline-copper:hover{
+  background: var(--copper);
+  color: #14161B;
+  border-color: var(--copper);
+}
 
-      .bench-table {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        overflow: hidden;
-      }
-      .bench-table table {
-        margin-bottom: 0;
-      }
-      .bench-table thead th {
-        background: var(--panel-2);
-        color: var(--ink-dim);
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        border-bottom: 1px solid var(--line);
-        font-weight: 600;
-        padding: 0.7rem 0.9rem;
-      }
-      .bench-table tbody td {
-        border-bottom: 1px solid var(--line);
-        padding: 0.65rem 0.9rem;
-        vertical-align: middle;
-        color: var(--ink);
-      }
-      .bench-table tbody tr:last-child td {
-        border-bottom: none;
-      }
-      .bench-table tbody tr:hover {
-        background: rgba(255, 255, 255, 0.02);
-      }
+.bench-table{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bench-table table{ margin-bottom: 0; }
+.bench-table thead th{
+  background: var(--panel-2);
+  color: var(--ink-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  padding: 0.7rem 0.9rem;
+}
+.bench-table tbody td{
+  border-bottom: 1px solid var(--line);
+  padding: 0.65rem 0.9rem;
+  vertical-align: middle;
+  color: var(--ink);
+}
+.bench-table tbody tr:last-child td{ border-bottom: none; }
+.bench-table tbody tr:hover{ background: rgba(255,255,255,0.02); }
 
-      .ref-badge {
-        font-family: "JetBrains Mono", monospace;
-        font-weight: 700;
-        font-size: 0.75rem;
-        color: var(--copper);
-        background: rgba(201, 128, 61, 0.12);
-        border: 1px solid rgba(201, 128, 61, 0.35);
-        border-radius: 4px;
-        padding: 0.15rem 0.45rem;
-        display: inline-block;
-        min-width: 3.2rem;
-        text-align: center;
-      }
-      .item-name {
-        font-weight: 600;
-      }
-      .item-loc {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.78rem;
-        color: var(--ink-dim);
-      }
-      .cat-pill {
-        font-size: 0.72rem;
-        color: var(--ink-dim);
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        padding: 0.15rem 0.6rem;
-      }
-      .qty-control {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .qty-btn {
-        width: 24px;
-        height: 24px;
-        border: 1px solid var(--line);
-        background: var(--panel-2);
-        color: var(--ink);
-        border-radius: 4px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.85rem;
-        line-height: 1;
-        padding: 0;
-      }
-      .qty-btn:hover {
-        border-color: var(--copper-dim);
-        color: var(--copper);
-      }
-      .qty-val {
-        min-width: 2ch;
-        text-align: center;
-        font-weight: 700;
-      }
+.ref-badge{
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: 0.75rem;
+  color: var(--copper);
+  background: rgba(122,30,40,0.08);
+  border: 1px solid rgba(122,30,40,0.3);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  display: inline-block;
+  min-width: 3.2rem;
+  text-align: center;
+}
+.item-name{ font-weight: 600; }
+.item-loc{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+}
+.cat-pill{
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0.15rem 0.6rem;
+}
+.qty-control{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.qty-btn{
+  width: 24px; height: 24px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  color: var(--ink);
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0;
+}
+.qty-btn:hover{ border-color: var(--copper-dim); color: var(--copper); }
+.qty-val{ min-width: 2ch; text-align: center; font-weight: 700; }
 
-      .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 0.4rem;
-      }
-      .status-ok .status-dot {
-        background: var(--ok);
-      }
-      .status-low .status-dot {
-        background: var(--warn);
-      }
-      .status-out .status-dot {
-        background: var(--bad);
-      }
-      .status-text {
-        font-size: 0.78rem;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .status-ok .status-text {
-        color: var(--ok);
-      }
-      .status-low .status-text {
-        color: var(--warn);
-      }
-      .status-out .status-text {
-        color: var(--bad);
-      }
+.status-dot{
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 0.4rem;
+}
+.status-ok .status-dot{ background: var(--ok); }
+.status-low .status-dot{ background: var(--warn); }
+.status-out .status-dot{ background: var(--bad); }
+.status-text{ font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
+.status-ok .status-text{ color: var(--ok); }
+.status-low .status-text{ color: var(--warn); }
+.status-out .status-text{ color: var(--bad); }
 
-      .row-actions .btn {
-        color: var(--ink-dim);
-        border: none;
-        background: none;
-        padding: 0.2rem 0.4rem;
-      }
-      .row-actions .btn:hover {
-        color: var(--copper);
-      }
+.row-actions .btn{
+  color: var(--ink-dim);
+  border: none;
+  background: none;
+  padding: 0.2rem 0.4rem;
+}
+.row-actions .btn:hover{ color: var(--copper); }
 
-      .modal-content {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        color: var(--ink);
-      }
-      .modal-header,
-      .modal-footer {
-        border-color: var(--line);
-      }
-      .form-label {
-        font-size: 0.78rem;
-        color: var(--ink-dim);
-        text-transform: uppercase;
-        letter-spacing: 0.04em;
-      }
+.modal-content{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.modal-header, .modal-footer{ border-color: var(--line); }
+.form-label{
+  font-size: 0.78rem;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 
-      .empty-state {
-        text-align: center;
-        padding: 3.5rem 1rem;
-        color: var(--ink-dim);
-      }
-      .empty-state i {
-        font-size: 2rem;
-        color: var(--copper-dim);
-      }
+.empty-state{
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--ink-dim);
+}
+.empty-state i{ font-size: 2rem; color: var(--copper-dim); }
 
-      .type-pill {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.68rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        border-radius: 4px;
-        padding: 0.15rem 0.5rem;
-        display: inline-block;
-      }
-      .type-pill.reusable {
-        color: var(--ok);
-        background: rgba(127, 176, 105, 0.12);
-        border: 1px solid rgba(127, 176, 105, 0.3);
-      }
-      .type-pill.consumable {
-        color: var(--warn);
-        background: rgba(232, 163, 61, 0.12);
-        border: 1px solid rgba(232, 163, 61, 0.3);
-      }
+.type-pill{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  display: inline-block;
+}
+.type-pill.reusable{
+  color: var(--ok);
+  background: rgba(127,176,105,0.12);
+  border: 1px solid rgba(127,176,105,0.3);
+}
+.type-pill.consumable{
+  color: var(--warn);
+  background: rgba(232,163,61,0.12);
+  border: 1px solid rgba(232,163,61,0.3);
+}
 
-      .form-check-label {
-        color: var(--ink);
-        font-size: 0.9rem;
-      }
-      .form-check-input {
-        background-color: var(--panel-2);
-        border-color: var(--line);
-      }
-      .form-check-input:checked {
-        background-color: var(--copper);
-        border-color: var(--copper);
-      }
+.form-check-label{ color: var(--ink); font-size: 0.9rem; }
+.form-check-input{ background-color: var(--panel-2); border-color: var(--line); }
+.form-check-input:checked{ background-color: var(--copper); border-color: var(--copper); }
 
-      .loans-section {
-        background: var(--panel);
-        border: 1px solid var(--line);
-        border-radius: 6px;
-        margin-top: 1.5rem;
-        overflow: hidden;
-      }
-      .loans-header {
-        padding: 0.8rem 1rem;
-        border-bottom: 1px solid var(--line);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .loans-header h2 {
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin: 0;
-      }
-      .loans-header .count {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.75rem;
-        color: var(--ink-dim);
-      }
-      .loan-row td {
-        border-bottom: 1px solid var(--line);
-        padding: 0.6rem 0.9rem;
-        vertical-align: middle;
-        font-size: 0.85rem;
-      }
-      .loan-row:last-child td {
-        border-bottom: none;
-      }
-      .loan-borrower {
-        font-weight: 600;
-      }
-      .loan-date {
-        color: var(--ink-dim);
-        font-size: 0.78rem;
-        font-family: "JetBrains Mono", monospace;
-      }
+.loans-section{
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+}
+.loans-header{
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.loans-header h2{
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+.loans-header .count{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--ink-dim);
+}
+.loan-row td{
+  border-bottom: 1px solid var(--line);
+  padding: 0.6rem 0.9rem;
+  vertical-align: middle;
+  font-size: 0.85rem;
+}
+.loan-row:last-child td{ border-bottom: none; }
+.loan-borrower{ font-weight: 600; }
+.loan-date{ color: var(--ink-dim); font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
 
-      .admin-only {
-        display: none;
-      }
-      body.is-admin .admin-only {
-        display: inline-flex;
-      }
-      body.is-admin .admin-only.d-block-admin {
-        display: block;
-      }
-      .admin-badge {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.72rem;
-        color: var(--ok);
-        border: 1px solid rgba(127, 176, 105, 0.35);
-        background: rgba(127, 176, 105, 0.1);
-        border-radius: 20px;
-        padding: 0.25rem 0.7rem;
-        display: none;
-        align-items: center;
-        gap: 0.3rem;
-      }
-      body.is-admin .admin-badge {
-        display: inline-flex;
-      }
-      .viewer-badge {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.72rem;
-        color: var(--ink-dim);
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        padding: 0.25rem 0.7rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-      }
-      body.is-admin .viewer-badge {
-        display: none;
-      }
+.admin-only{ display: none; }
+body.is-admin .admin-only{ display: inline-flex; }
+body.is-admin .admin-only.d-block-admin{ display: block; }
+.admin-badge{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--ok);
+  border: 1px solid rgba(127,176,105,0.35);
+  background: rgba(127,176,105,0.1);
+  border-radius: 20px;
+  padding: 0.25rem 0.7rem;
+  display: none;
+  align-items: center;
+  gap: 0.3rem;
+}
+body.is-admin .admin-badge{ display: inline-flex; }
+.viewer-badge{
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--ink-dim);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 0.25rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+body.is-admin .viewer-badge{ display: none; }
 
-      ::-webkit-scrollbar {
-        height: 8px;
-        width: 8px;
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--line);
-        border-radius: 4px;
-      }
+::-webkit-scrollbar{ height: 8px; width: 8px; }
+::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 4px; }
     </style>
   </head>
   <body>
@@ -416,8 +351,7 @@
         >
           <div>
             <h1>
-              <i class="bi bi-cpu me-2" style="color: var(--copper)"></i>Parts
-              Bench
+              <i class="bi bi-cpu me-2" style="color: var(--copper)"></i>RobKit
             </h1>
             <div class="tagline">arduino kit &amp; component inventory</div>
           </div>
