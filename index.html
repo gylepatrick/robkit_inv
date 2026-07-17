@@ -1,22 +1,14 @@
-<!doctype html>
-<html lang="en" data-bs-theme="dark">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RobKit — Arduino Inventory</title>
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Parts Bench — Arduino Inventory</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
 :root{
   color-scheme: light;
   --bg: #F6F3EC;
@@ -96,7 +88,7 @@ body{
 .stat-card.accent .num{ color: var(--copper); }
 .stat-card.warn .num{ color: var(--warn); }
 .stat-card.bad .num{ color: var(--bad); }
- 
+
 .toolbar{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -114,7 +106,7 @@ body{
   box-shadow: 0 0 0 0.2rem rgba(122,30,40,0.15);
 }
 .form-control::placeholder{ color: var(--ink-dim); }
- 
+
 .btn-copper{
   background: var(--gold);
   border-color: var(--gold);
@@ -135,7 +127,7 @@ body{
   color: #14161B;
   border-color: var(--copper);
 }
- 
+
 .bench-table{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -164,7 +156,7 @@ body{
 }
 .bench-table tbody tr:last-child td{ border-bottom: none; }
 .bench-table tbody tr:hover td{ background: var(--panel-2); }
- 
+
 .ref-badge{
   font-family: 'JetBrains Mono', monospace;
   font-weight: 700;
@@ -212,7 +204,7 @@ body{
 }
 .qty-btn:hover{ border-color: var(--copper-dim); color: var(--copper); }
 .qty-val{ min-width: 2ch; text-align: center; font-weight: 700; }
- 
+
 .status-dot{
   width: 8px; height: 8px;
   border-radius: 50%;
@@ -226,7 +218,7 @@ body{
 .status-ok .status-text{ color: var(--ok); }
 .status-low .status-text{ color: var(--warn); }
 .status-out .status-text{ color: var(--bad); }
- 
+
 .row-actions .btn{
   color: var(--ink-dim);
   border: none;
@@ -234,7 +226,7 @@ body{
   padding: 0.2rem 0.4rem;
 }
 .row-actions .btn:hover{ color: var(--copper); }
- 
+
 .modal-content{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -247,14 +239,14 @@ body{
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
- 
+
 .empty-state{
   text-align: center;
   padding: 3.5rem 1rem;
   color: var(--ink-dim);
 }
 .empty-state i{ font-size: 2rem; color: var(--copper-dim); }
- 
+
 .type-pill{
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.68rem;
@@ -274,11 +266,11 @@ body{
   background: rgba(232,163,61,0.12);
   border: 1px solid rgba(232,163,61,0.3);
 }
- 
+
 .form-check-label{ color: var(--ink); font-size: 0.9rem; }
 .form-check-input{ background-color: var(--panel-2); border-color: var(--line); }
 .form-check-input:checked{ background-color: var(--copper); border-color: var(--copper); }
- 
+
 .loans-section{
   background: var(--panel);
   border: 1px solid var(--line);
@@ -315,7 +307,7 @@ body{
 .loan-row:last-child td{ border-bottom: none; }
 .loan-borrower{ font-weight: 600; }
 .loan-date{ color: var(--ink-dim); font-size: 0.78rem; font-family: 'JetBrains Mono', monospace; }
- 
+
 .admin-only{ display: none; }
 body.is-admin .admin-only{ display: inline-flex; }
 body.is-admin .admin-only.d-block-admin{ display: block; }
@@ -344,1039 +336,708 @@ body.is-admin .admin-badge{ display: inline-flex; }
   gap: 0.3rem;
 }
 body.is-admin .viewer-badge{ display: none; }
- 
+
 ::-webkit-scrollbar{ height: 8px; width: 8px; }
 ::-webkit-scrollbar-thumb{ background: var(--line); border-radius: 4px; }
-    </style>
-  </head>
-  <body>
-    <div class="topbar py-3">
-      <div class="container-fluid px-4">
-        <div
-          class="d-flex justify-content-between align-items-center flex-wrap gap-2"
-        >
-          <div>
-            <h1>
-              <i class="bi bi-cpu me-2" style="color: var(--copper)"></i>RobKit
-            </h1>
-            <div class="tagline">arduino kit &amp; component inventory</div>
-          </div>
-          <div class="d-flex align-items-center gap-2">
-            <span class="viewer-badge"><i class="bi bi-eye"></i>Viewing</span>
-            <span class="admin-badge"
-              ><i class="bi bi-shield-check"></i>Admin</span
-            >
-            <button
-              class="btn btn-outline-copper admin-only"
-              onclick="logoutAdmin()"
-            >
-              <i class="bi bi-box-arrow-left me-1"></i>Log out
-            </button>
-            <button
-              class="btn btn-outline-copper"
-              id="loginBtn"
-              onclick="openLoginModal()"
-            >
-              <i class="bi bi-shield-lock me-1"></i>Admin login
-            </button>
-            <button
-              class="btn btn-copper admin-only"
-              data-bs-toggle="modal"
-              data-bs-target="#itemModal"
-              onclick="openAddModal()"
-            >
-              <i class="bi bi-plus-lg me-1"></i>Add item
-            </button>
-          </div>
-        </div>
+</style>
+</head>
+<body>
+
+<div class="topbar py-3">
+  <div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <div>
+        <h1><i class="bi bi-cpu me-2" style="color:var(--gold)"></i>Parts Bench</h1>
+        <div class="tagline">arduino kit &amp; component inventory</div>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <span class="viewer-badge"><i class="bi bi-eye"></i>Viewing</span>
+        <span class="admin-badge"><i class="bi bi-shield-check"></i>Admin</span>
+        <button class="btn btn-outline-copper admin-only" onclick="logoutAdmin()">
+          <i class="bi bi-box-arrow-left me-1"></i>Log out
+        </button>
+        <button class="btn btn-outline-copper" id="loginBtn" onclick="openLoginModal()">
+          <i class="bi bi-shield-lock me-1"></i>Admin login
+        </button>
+        <button class="btn btn-copper admin-only" data-bs-toggle="modal" data-bs-target="#itemModal" onclick="openAddModal()">
+          <i class="bi bi-plus-lg me-1"></i>Add item
+        </button>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="container-fluid px-4 py-4">
-      <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-          <div class="stat-card">
-            <div class="num" id="statTotalItems">0</div>
-            <div class="lbl">Line items</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card accent">
-            <div class="num" id="statTotalQty">0</div>
-            <div class="lbl">Total units</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card warn">
-            <div class="num" id="statLow">0</div>
-            <div class="lbl">Low stock</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="stat-card bad">
-            <div class="num" id="statOut">0</div>
-            <div class="lbl">Out of stock</div>
-          </div>
-        </div>
-      </div>
+<div class="container-fluid px-4 py-4">
 
-      <div class="toolbar p-3 mb-3">
-        <div class="row g-2 align-items-center">
-          <div class="col-12 col-md-5">
-            <div class="input-group">
-              <span
-                class="input-group-text"
-                style="
-                  background: var(--panel-2);
-                  border-color: var(--line);
-                  color: var(--ink-dim);
-                "
-                ><i class="bi bi-search"></i
-              ></span>
-              <input
-                type="text"
-                class="form-control"
-                id="searchInput"
-                placeholder="Search name, location, notes..."
-              />
-            </div>
-          </div>
-          <div class="col-6 col-md-3">
-            <select class="form-select" id="categoryFilter">
-              <option value="">All categories</option>
-            </select>
-          </div>
-          <div class="col-6 col-md-2">
-            <select class="form-select" id="statusFilter">
-              <option value="">All statuses</option>
-              <option value="ok">In stock</option>
-              <option value="low">Low stock</option>
-              <option value="out">Out of stock</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-2 text-md-end">
-            <button
-              class="btn btn-outline-copper w-100"
-              onclick="clearFilters()"
-            >
-              <i class="bi bi-x-circle me-1"></i>Clear
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="bench-table">
-        <div class="table-responsive">
-          <table class="table mb-0">
-            <thead>
-              <tr>
-                <th>Ref</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Type</th>
-                <th>Location</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th class="text-end">Actions</th>
-              </tr>
-            </thead>
-            <tbody id="itemsBody"></tbody>
-          </table>
-        </div>
-        <div id="emptyState" class="empty-state d-none">
-          <i class="bi bi-box-seam d-block mb-2"></i>
-          <div class="mb-1" style="font-weight: 600">
-            No parts on the bench yet
-          </div>
-          <div class="mono" style="font-size: 0.82rem">
-            Add your first item to start tracking stock.
-          </div>
-        </div>
-      </div>
-
-      <div class="loans-section d-none" id="loansSection">
-        <div class="loans-header">
-          <h2>
-            <i
-              class="bi bi-arrow-left-right me-2"
-              style="color: var(--copper)"
-            ></i
-            >Currently borrowed
-          </h2>
-          <span class="count" id="loansCount">0 active</span>
-        </div>
-        <div class="table-responsive">
-          <table class="table mb-0">
-            <tbody id="loansBody"></tbody>
-          </table>
-        </div>
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card">
+        <div class="num" id="statTotalItems">0</div>
+        <div class="lbl">Line items</div>
       </div>
     </div>
-
-    <div class="modal fade" id="itemModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalTitle">Add item</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="itemId" />
-            <div class="mb-3">
-              <label class="form-label">Name</label>
-              <input
-                type="text"
-                class="form-control"
-                id="fName"
-                placeholder="e.g. HC-SR04 Ultrasonic Sensor"
-              />
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-6">
-                <label class="form-label">Category</label>
-                <select class="form-select" id="fCategory">
-                  <option value="Microcontroller">Microcontroller (U)</option>
-                  <option value="Sensor">Sensor (S)</option>
-                  <option value="Actuator">Actuator / motor (M)</option>
-                  <option value="Passive">Passive component (P)</option>
-                  <option value="Display">Display (D)</option>
-                  <option value="Power">Power / battery (B)</option>
-                  <option value="Cable">Cable / connector (W)</option>
-                  <option value="Tool">Tool (T)</option>
-                  <option value="Kit">Full kit (K)</option>
-                  <option value="Other">Other (X)</option>
-                </select>
-              </div>
-              <div class="col-6">
-                <label class="form-label">Location / bin</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="fLocation"
-                  placeholder="e.g. Bin A3"
-                />
-              </div>
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-6">
-                <label class="form-label">Quantity</label>
-                <input
-                  type="number"
-                  class="form-control mono"
-                  id="fQty"
-                  min="0"
-                  value="1"
-                />
-              </div>
-              <div class="col-6">
-                <label class="form-label">Low stock threshold</label>
-                <input
-                  type="number"
-                  class="form-control mono"
-                  id="fMin"
-                  min="0"
-                  value="2"
-                />
-              </div>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Notes</label>
-              <textarea
-                class="form-control"
-                id="fNotes"
-                rows="2"
-                placeholder="Optional — voltage, datasheet link, etc."
-              ></textarea>
-            </div>
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="fConsumable"
-              />
-              <label class="form-check-label" for="fConsumable">
-                Consumable — used up when taken, not returned to stock
-              </label>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-copper"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-copper"
-              id="saveBtn"
-              onclick="saveItem()"
-            >
-              Save item
-            </button>
-          </div>
-        </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card accent">
+        <div class="num" id="statTotalQty">0</div>
+        <div class="lbl">Total units</div>
       </div>
     </div>
-
-    <div class="modal fade" id="borrowModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="borrowModalTitle">Borrow item</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="borrowItemId" />
-            <p
-              class="mono"
-              style="font-size: 0.85rem; color: var(--ink-dim)"
-              id="borrowItemInfo"
-            ></p>
-            <div class="mb-3">
-              <label class="form-label" id="borrowerLabel">Borrower</label>
-              <input
-                type="text"
-                class="form-control"
-                id="fBorrower"
-                placeholder="Who's taking this?"
-              />
-            </div>
-            <div class="mb-1">
-              <label class="form-label">Quantity</label>
-              <input
-                type="number"
-                class="form-control mono"
-                id="fBorrowQty"
-                min="1"
-                value="1"
-              />
-            </div>
-            <div
-              id="borrowWarning"
-              class="text-warning d-none"
-              style="font-size: 0.8rem"
-            ></div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-copper"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-copper"
-              id="confirmBorrowBtn"
-              onclick="confirmBorrow()"
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card warn">
+        <div class="num" id="statLow">0</div>
+        <div class="lbl">Low stock</div>
       </div>
     </div>
-
-    <div class="modal fade" id="loginModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="loginModalTitle">Admin login</h5>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <p
-              class="mono"
-              style="font-size: 0.8rem; color: var(--ink-dim)"
-              id="loginModalHint"
-            >
-              Enter the admin password to add, edit, or delete items.
-            </p>
-            <div class="mb-1">
-              <label class="form-label" id="passwordFieldLabel">Password</label>
-              <input
-                type="password"
-                class="form-control"
-                id="fPassword"
-                placeholder="Password"
-                autocomplete="current-password"
-              />
-            </div>
-            <div
-              id="loginError"
-              class="text-danger d-none"
-              style="font-size: 0.8rem; margin-top: 0.4rem"
-            ></div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-outline-copper"
-              data-bs-dismiss="modal"
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              class="btn btn-copper"
-              id="loginSubmitBtn"
-              onclick="submitLogin()"
-            >
-              Log in
-            </button>
-          </div>
-        </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card bad">
+        <div class="num" id="statOut">0</div>
+        <div class="lbl">Out of stock</div>
       </div>
     </div>
+  </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-      const PREFIX = {
-        Microcontroller: "U",
-        Sensor: "S",
-        Actuator: "M",
-        Passive: "P",
-        Display: "D",
-        Power: "B",
-        Cable: "W",
-        Tool: "T",
-        Kit: "K",
-        Other: "X",
-      };
+  <div class="toolbar p-3 mb-3">
+    <div class="row g-2 align-items-center">
+      <div class="col-12 col-md-5">
+        <div class="input-group">
+          <span class="input-group-text" style="background:var(--panel-2); border-color:var(--line); color:var(--ink-dim);"><i class="bi bi-search"></i></span>
+          <input type="text" class="form-control" id="searchInput" placeholder="Search name, location, notes...">
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <select class="form-select" id="categoryFilter">
+          <option value="">All categories</option>
+        </select>
+      </div>
+      <div class="col-6 col-md-2">
+        <select class="form-select" id="statusFilter">
+          <option value="">All statuses</option>
+          <option value="ok">In stock</option>
+          <option value="low">Low stock</option>
+          <option value="out">Out of stock</option>
+        </select>
+      </div>
+      <div class="col-12 col-md-2 text-md-end">
+        <button class="btn btn-outline-copper w-100" onclick="clearFilters()">
+          <i class="bi bi-x-circle me-1"></i>Clear
+        </button>
+      </div>
+    </div>
+  </div>
 
-      let items = [];
-      let loans = [];
-      let itemModal;
-      let borrowModal;
-      let loginModal;
-      let isAdmin = false;
-      let adminHash = null;
-
-      // ---- Supabase config ----
-      // Fill these in from your Supabase project: Settings -> API
-      const SUPABASE_URL = "https://tnvofnpkqoaituwkzxcm.supabase.co";
-      const SUPABASE_ANON_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRudm9mbnBrcW9haXR1d2t6eGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQyMzYwNTMsImV4cCI6MjA5OTgxMjA1M30._qAitIIaFr5MTbgof3MZuF19kG2W4IZnvu3A4yXL1sg";
-
-      const supabaseClient = SUPABASE_URL.startsWith("http")
-        ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-        : null;
-
-      function checkConfigured() {
-        if (!supabaseClient) {
-          alert(
-            "Supabase isn't configured yet. Open the file and set SUPABASE_URL and SUPABASE_ANON_KEY near the top of the script.",
-          );
-          return false;
-        }
-        return true;
-      }
-
-      async function loadData() {
-        if (!checkConfigured()) return;
-
-        const { data: itemRows, error: itemErr } = await supabaseClient
-          .from("items")
-          .select("*")
-          .order("name");
-        if (itemErr) {
-          console.error("Load items failed", itemErr);
-          items = [];
-        } else {
-          items = itemRows.map((r) => ({
-            id: r.id,
-            ref: r.ref,
-            name: r.name,
-            category: r.category,
-            location: r.location,
-            qty: r.qty,
-            min: r.min,
-            notes: r.notes,
-            consumable: r.consumable,
-          }));
-        }
-
-        const { data: loanRows, error: loanErr } = await supabaseClient
-          .from("loans")
-          .select("*")
-          .order("date", { ascending: false });
-        if (loanErr) {
-          console.error("Load loans failed", loanErr);
-          loans = [];
-        } else {
-          loans = loanRows.map((r) => ({
-            id: r.id,
-            itemId: r.item_id,
-            itemRef: r.item_ref,
-            itemName: r.item_name,
-            borrower: r.borrower,
-            qty: r.qty,
-            date: r.date,
-          }));
-        }
-
-        const { data: adminRow } = await supabaseClient
-          .from("admin_settings")
-          .select("password_hash")
-          .eq("id", 1)
-          .maybeSingle();
-        adminHash = adminRow ? adminRow.password_hash : null;
-      }
-
-      function subscribeToChanges() {
-        if (!supabaseClient) return;
-        supabaseClient
-          .channel("parts-bench-changes")
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "items" },
-            async () => {
-              await loadData();
-              render();
-            },
-          )
-          .on(
-            "postgres_changes",
-            { event: "*", schema: "public", table: "loans" },
-            async () => {
-              await loadData();
-              render();
-            },
-          )
-          .subscribe();
-      }
-
-      async function hashPassword(pw) {
-        const enc = new TextEncoder().encode(pw);
-        const buf = await crypto.subtle.digest("SHA-256", enc);
-        return Array.from(new Uint8Array(buf))
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("");
-      }
-
-      function openLoginModal() {
-        if (!checkConfigured()) return;
-        document.getElementById("fPassword").value = "";
-        document.getElementById("loginError").classList.add("d-none");
-        if (adminHash) {
-          document.getElementById("loginModalTitle").textContent =
-            "Admin login";
-          document.getElementById("loginModalHint").textContent =
-            "Enter the admin password to add, edit, or delete items.";
-          document.getElementById("passwordFieldLabel").textContent =
-            "Password";
-          document.getElementById("loginSubmitBtn").textContent = "Log in";
-        } else {
-          document.getElementById("loginModalTitle").textContent =
-            "Set admin password";
-          document.getElementById("loginModalHint").textContent =
-            "No admin password is set yet. Choose one now — anyone with it will be able to add, edit, or delete items.";
-          document.getElementById("passwordFieldLabel").textContent =
-            "New password";
-          document.getElementById("loginSubmitBtn").textContent =
-            "Set password and log in";
-        }
-        loginModal.show();
-      }
-
-      async function submitLogin() {
-        const pw = document.getElementById("fPassword").value;
-        const errorEl = document.getElementById("loginError");
-        if (!pw) {
-          errorEl.textContent = "Enter a password.";
-          errorEl.classList.remove("d-none");
-          return;
-        }
-
-        if (!adminHash) {
-          const newHash = await hashPassword(pw);
-          const { error } = await supabaseClient
-            .from("admin_settings")
-            .upsert({ id: 1, password_hash: newHash });
-          if (error) {
-            errorEl.textContent =
-              "Could not save password — check your Supabase setup.";
-            errorEl.classList.remove("d-none");
-            return;
-          }
-          adminHash = newHash;
-          isAdmin = true;
-          document.body.classList.add("is-admin");
-          render();
-          loginModal.hide();
-          return;
-        }
-
-        const attemptHash = await hashPassword(pw);
-        if (attemptHash === adminHash) {
-          isAdmin = true;
-          document.body.classList.add("is-admin");
-          render();
-          loginModal.hide();
-        } else {
-          errorEl.textContent = "Incorrect password.";
-          errorEl.classList.remove("d-none");
-        }
-      }
-
-      function logoutAdmin() {
-        isAdmin = false;
-        document.body.classList.remove("is-admin");
-        render();
-      }
-
-      function nextRef(category) {
-        const p = PREFIX[category] || "X";
-        const count = items.filter((i) => i.ref && i.ref.startsWith(p)).length;
-        return p + (count + 1);
-      }
-
-      function itemStatus(item) {
-        if (item.qty <= 0) return "out";
-        if (item.qty <= item.min) return "low";
-        return "ok";
-      }
-
-      function statusLabel(s) {
-        return s === "out"
-          ? "Out of stock"
-          : s === "low"
-            ? "Low stock"
-            : "In stock";
-      }
-
-      function escapeHtml(str) {
-        const d = document.createElement("div");
-        d.textContent = str || "";
-        return d.innerHTML;
-      }
-
-      function populateCategoryFilter() {
-        const sel = document.getElementById("categoryFilter");
-        const current = sel.value;
-        const cats = Object.keys(PREFIX);
-        sel.innerHTML =
-          '<option value="">All categories</option>' +
-          cats.map((c) => `<option value="${c}">${c}</option>`).join("");
-        sel.value = current;
-      }
-
-      function render() {
-        const search = document
-          .getElementById("searchInput")
-          .value.trim()
-          .toLowerCase();
-        const catFilter = document.getElementById("categoryFilter").value;
-        const statusFilter = document.getElementById("statusFilter").value;
-
-        let filtered = items.filter((it) => {
-          if (catFilter && it.category !== catFilter) return false;
-          const st = itemStatus(it);
-          if (statusFilter && st !== statusFilter) return false;
-          if (search) {
-            const hay = (
-              it.name +
-              " " +
-              it.location +
-              " " +
-              it.notes
-            ).toLowerCase();
-            if (!hay.includes(search)) return false;
-          }
-          return true;
-        });
-
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-
-        const body = document.getElementById("itemsBody");
-        const empty = document.getElementById("emptyState");
-
-        if (filtered.length === 0) {
-          body.innerHTML = "";
-          empty.classList.remove("d-none");
-        } else {
-          empty.classList.add("d-none");
-          body.innerHTML = filtered
-            .map((it) => {
-              const st = itemStatus(it);
-              return `
-            <tr>
-              <td><span class="ref-badge">${it.ref}</span></td>
-              <td>
-                <div class="item-name">${escapeHtml(it.name)}</div>
-                ${it.notes ? `<div class="text-secondary" style="font-size:0.78rem;">${escapeHtml(it.notes)}</div>` : ""}
-              </td>
-              <td><span class="cat-pill">${it.category}</span></td>
-              <td><span class="type-pill ${it.consumable ? "consumable" : "reusable"}">${it.consumable ? "Consumable" : "Reusable"}</span></td>
-              <td class="item-loc">${escapeHtml(it.location) || "—"}</td>
-              <td>
-                <div class="qty-control">
-                  <button class="qty-btn" onclick="adjustQty('${it.id}', -1)" aria-label="Decrease quantity"><i class="bi bi-dash"></i></button>
-                  <span class="qty-val">${it.qty}</span>
-                  <button class="qty-btn" onclick="adjustQty('${it.id}', 1)" aria-label="Increase quantity"><i class="bi bi-plus"></i></button>
-                </div>
-              </td>
-              <td>
-                <span class="status-${st}"><span class="status-dot"></span><span class="status-text">${statusLabel(st)}</span></span>
-              </td>
-              <td class="text-end row-actions">
-                <button class="btn btn-sm" onclick="openBorrowModal('${it.id}')" aria-label="${it.consumable ? "Use" : "Borrow"}" title="${it.consumable ? "Use" : "Borrow"}"><i class="bi bi-box-arrow-right"></i></button>
-                <button class="btn btn-sm admin-only" onclick="openEditModal('${it.id}')" aria-label="Edit"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-sm admin-only" onclick="deleteItem('${it.id}')" aria-label="Delete"><i class="bi bi-trash"></i></button>
-              </td>
-            </tr>`;
-            })
-            .join("");
-        }
-
-        document.getElementById("statTotalItems").textContent = items.length;
-        document.getElementById("statTotalQty").textContent = items.reduce(
-          (s, i) => s + Number(i.qty || 0),
-          0,
-        );
-        document.getElementById("statLow").textContent = items.filter(
-          (i) => itemStatus(i) === "low",
-        ).length;
-        document.getElementById("statOut").textContent = items.filter(
-          (i) => itemStatus(i) === "out",
-        ).length;
-
-        renderLoans();
-      }
-
-      function renderLoans() {
-        const section = document.getElementById("loansSection");
-        const body = document.getElementById("loansBody");
-        const countEl = document.getElementById("loansCount");
-
-        if (loans.length === 0) {
-          section.classList.add("d-none");
-          body.innerHTML = "";
-          return;
-        }
-        section.classList.remove("d-none");
-        countEl.textContent = `${loans.length} active`;
-
-        const sorted = [...loans].sort(
-          (a, b) => new Date(b.date) - new Date(a.date),
-        );
-        body.innerHTML = sorted
-          .map(
-            (l) => `
-          <tr class="loan-row">
-            <td><span class="ref-badge">${l.itemRef}</span></td>
-            <td>
-              <div class="loan-borrower">${escapeHtml(l.borrower) || "Unspecified"}</div>
-              <div class="loan-date">${escapeHtml(l.itemName)} · qty ${l.qty} · ${l.date}</div>
-            </td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-copper" onclick="returnLoan('${l.id}')">
-                <i class="bi bi-arrow-return-left me-1"></i>Return
-              </button>
-            </td>
+  <div class="bench-table">
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>Ref</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Quantity</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
           </tr>
-        `,
-          )
-          .join("");
-      }
+        </thead>
+        <tbody id="itemsBody"></tbody>
+      </table>
+    </div>
+    <div id="emptyState" class="empty-state d-none">
+      <i class="bi bi-box-seam d-block mb-2"></i>
+      <div class="mb-1" style="font-weight:600;">No parts on the bench yet</div>
+      <div class="mono" style="font-size:0.82rem;">Add your first item to start tracking stock.</div>
+    </div>
+  </div>
 
-      function openBorrowModal(id) {
-        if (!checkConfigured()) return;
-        const it = items.find((i) => i.id === id);
-        if (!it) return;
-        document.getElementById("borrowItemId").value = id;
-        document.getElementById("borrowItemInfo").textContent =
-          `${it.ref} — ${it.name} · ${it.qty} in stock`;
-        document.getElementById("fBorrower").value = "";
-        document.getElementById("fBorrowQty").value = 1;
-        document.getElementById("fBorrowQty").max = it.qty;
-        document.getElementById("borrowWarning").classList.add("d-none");
+  <div class="loans-section d-none" id="loansSection">
+    <div class="loans-header">
+      <h2><i class="bi bi-arrow-left-right me-2" style="color:var(--copper)"></i>Currently borrowed</h2>
+      <span class="count" id="loansCount">0 active</span>
+    </div>
+    <div class="table-responsive">
+      <table class="table mb-0">
+        <tbody id="loansBody"></tbody>
+      </table>
+    </div>
+  </div>
 
-        if (it.consumable) {
-          document.getElementById("borrowModalTitle").textContent =
-            `Use ${it.ref} (consumable)`;
-          document.getElementById("borrowerLabel").textContent =
-            "Used by (optional)";
-          document.getElementById("confirmBorrowBtn").textContent =
-            "Confirm use";
-        } else {
-          document.getElementById("borrowModalTitle").textContent =
-            `Borrow ${it.ref}`;
-          document.getElementById("borrowerLabel").textContent = "Borrower";
-          document.getElementById("confirmBorrowBtn").textContent =
-            "Confirm borrow";
-        }
-        borrowModal.show();
-      }
+</div>
 
-      async function confirmBorrow() {
-        const id = document.getElementById("borrowItemId").value;
-        const it = items.find((i) => i.id === id);
-        if (!it) return;
+<div class="modal fade" id="itemModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitle">Add item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="itemId">
+        <div class="mb-3">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" id="fName" placeholder="e.g. HC-SR04 Ultrasonic Sensor">
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="fCategory">
+              <option value="Microcontroller">Microcontroller (U)</option>
+              <option value="Sensor">Sensor (S)</option>
+              <option value="Actuator">Actuator / motor (M)</option>
+              <option value="Passive">Passive component (P)</option>
+              <option value="Display">Display (D)</option>
+              <option value="Power">Power / battery (B)</option>
+              <option value="Cable">Cable / connector (W)</option>
+              <option value="Tool">Tool (T)</option>
+              <option value="Kit">Full kit (K)</option>
+              <option value="Other">Other (X)</option>
+            </select>
+          </div>
+          <div class="col-6">
+            <label class="form-label">Location / bin</label>
+            <input type="text" class="form-control" id="fLocation" placeholder="e.g. Bin A3">
+          </div>
+        </div>
+        <div class="row g-3 mb-3">
+          <div class="col-6">
+            <label class="form-label">Quantity</label>
+            <input type="number" class="form-control mono" id="fQty" min="0" value="1">
+          </div>
+          <div class="col-6">
+            <label class="form-label">Low stock threshold</label>
+            <input type="number" class="form-control mono" id="fMin" min="0" value="2">
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Notes</label>
+          <textarea class="form-control" id="fNotes" rows="2" placeholder="Optional — voltage, datasheet link, etc."></textarea>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="fConsumable">
+          <label class="form-check-label" for="fConsumable">
+            Consumable — used up when taken, not returned to stock
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-copper" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-copper" id="saveBtn" onclick="saveItem()">Save item</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        const qty = Math.max(
-          1,
-          parseInt(document.getElementById("fBorrowQty").value) || 1,
-        );
-        const borrower = document.getElementById("fBorrower").value.trim();
-        const warning = document.getElementById("borrowWarning");
+<div class="modal fade" id="borrowModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="borrowModalTitle">Borrow item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="borrowItemId">
+        <p class="mono" style="font-size:0.85rem; color:var(--ink-dim);" id="borrowItemInfo"></p>
+        <div class="mb-3">
+          <label class="form-label" id="borrowerLabel">Borrower</label>
+          <input type="text" class="form-control" id="fBorrower" placeholder="Who's taking this?">
+        </div>
+        <div class="mb-1">
+          <label class="form-label">Quantity</label>
+          <input type="number" class="form-control mono" id="fBorrowQty" min="1" value="1">
+        </div>
+        <div id="borrowWarning" class="text-warning d-none" style="font-size:0.8rem;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-copper" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-copper" id="confirmBorrowBtn" onclick="confirmBorrow()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        if (qty > it.qty) {
-          warning.textContent = `Only ${it.qty} in stock — reduce the quantity.`;
-          warning.classList.remove("d-none");
-          return;
-        }
+<div class="modal fade" id="loginModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalTitle">Admin login</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p class="mono" style="font-size:0.8rem; color:var(--ink-dim);" id="loginModalHint">
+          Enter the admin password to add, edit, or delete items.
+        </p>
+        <div class="mb-1">
+          <label class="form-label" id="passwordFieldLabel">Password</label>
+          <input type="password" class="form-control" id="fPassword" placeholder="Password" autocomplete="current-password">
+        </div>
+        <div id="loginError" class="text-danger d-none" style="font-size:0.8rem; margin-top:0.4rem;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-copper" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-copper" id="loginSubmitBtn" onclick="submitLogin()">Log in</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        const newQty = it.qty - qty;
-        const { error: updErr } = await supabaseClient
-          .from("items")
-          .update({ qty: newQty })
-          .eq("id", it.id);
-        if (updErr) {
-          console.error("Borrow update failed", updErr);
-          return;
-        }
-        it.qty = newQty;
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const PREFIX = {
+  Microcontroller: 'U', Sensor: 'S', Actuator: 'M', Passive: 'P',
+  Display: 'D', Power: 'B', Cable: 'W', Tool: 'T', Kit: 'K', Other: 'X'
+};
 
-        if (!it.consumable) {
-          const loan = {
-            id:
-              "loan-" +
-              Date.now() +
-              "-" +
-              Math.random().toString(36).slice(2, 7),
-            item_id: it.id,
-            item_ref: it.ref,
-            item_name: it.name,
-            borrower: borrower,
-            qty: qty,
-            date: new Date().toISOString().slice(0, 10),
-          };
-          const { error: loanErr } = await supabaseClient
-            .from("loans")
-            .insert(loan);
-          if (!loanErr) {
-            loans.push({
-              id: loan.id,
-              itemId: loan.item_id,
-              itemRef: loan.item_ref,
-              itemName: loan.item_name,
-              borrower: loan.borrower,
-              qty: loan.qty,
-              date: loan.date,
-            });
-          }
-        }
+let items = [];
+let loans = [];
+let itemModal;
+let borrowModal;
+let loginModal;
+let isAdmin = false;
+let adminHash = null;
 
-        render();
-        borrowModal.hide();
-      }
+// ---- Supabase config ----
+// Fill these in from your Supabase project: Settings -> API
+const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-      async function returnLoan(loanId) {
-        const loan = loans.find((l) => l.id === loanId);
-        if (!loan) return;
-        const it = items.find((i) => i.id === loan.itemId);
-        if (it) {
-          const newQty = it.qty + loan.qty;
-          const { error } = await supabaseClient
-            .from("items")
-            .update({ qty: newQty })
-            .eq("id", it.id);
-          if (!error) it.qty = newQty;
-        }
-        const { error: delErr } = await supabaseClient
-          .from("loans")
-          .delete()
-          .eq("id", loanId);
-        if (!delErr) loans = loans.filter((l) => l.id !== loanId);
-        render();
-      }
+const supabaseClient = (SUPABASE_URL.startsWith('http'))
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
 
-      function clearFilters() {
-        document.getElementById("searchInput").value = "";
-        document.getElementById("categoryFilter").value = "";
-        document.getElementById("statusFilter").value = "";
-        render();
-      }
+function checkConfigured(){
+  if(!supabaseClient){
+    alert('Supabase isn\'t configured yet. Open the file and set SUPABASE_URL and SUPABASE_ANON_KEY near the top of the script.');
+    return false;
+  }
+  return true;
+}
 
-      function openAddModal() {
-        if (!isAdmin) return;
-        document.getElementById("modalTitle").textContent = "Add item";
-        document.getElementById("itemId").value = "";
-        document.getElementById("fName").value = "";
-        document.getElementById("fCategory").value = "Sensor";
-        document.getElementById("fLocation").value = "";
-        document.getElementById("fQty").value = 1;
-        document.getElementById("fMin").value = 2;
-        document.getElementById("fNotes").value = "";
-        document.getElementById("fConsumable").checked = false;
-      }
+async function loadData(){
+  if(!checkConfigured()) return;
 
-      function openEditModal(id) {
-        if (!isAdmin) return;
-        const it = items.find((i) => i.id === id);
-        if (!it) return;
-        document.getElementById("modalTitle").textContent =
-          `Edit ${it.ref} — ${it.name}`;
-        document.getElementById("itemId").value = it.id;
-        document.getElementById("fName").value = it.name;
-        document.getElementById("fCategory").value = it.category;
-        document.getElementById("fLocation").value = it.location;
-        document.getElementById("fQty").value = it.qty;
-        document.getElementById("fMin").value = it.min;
-        document.getElementById("fNotes").value = it.notes;
-        document.getElementById("fConsumable").checked = !!it.consumable;
-        itemModal.show();
-      }
+  const { data: itemRows, error: itemErr } = await supabaseClient
+    .from('items').select('*').order('name');
+  if(itemErr){ console.error('Load items failed', itemErr); items = []; }
+  else{
+    items = itemRows.map(r => ({
+      id: r.id, ref: r.ref, name: r.name, category: r.category,
+      location: r.location, qty: r.qty, min: r.min,
+      notes: r.notes, consumable: r.consumable
+    }));
+  }
 
-      async function saveItem() {
-        if (!isAdmin) return;
-        const id = document.getElementById("itemId").value;
-        const name = document.getElementById("fName").value.trim();
-        if (!name) {
-          document.getElementById("fName").focus();
-          return;
-        }
-        const category = document.getElementById("fCategory").value;
-        const location = document.getElementById("fLocation").value.trim();
-        const qty = Math.max(
-          0,
-          parseInt(document.getElementById("fQty").value) || 0,
-        );
-        const min = Math.max(
-          0,
-          parseInt(document.getElementById("fMin").value) || 0,
-        );
-        const notes = document.getElementById("fNotes").value.trim();
-        const consumable = document.getElementById("fConsumable").checked;
+  const { data: loanRows, error: loanErr } = await supabaseClient
+    .from('loans').select('*').order('date', { ascending: false });
+  if(loanErr){ console.error('Load loans failed', loanErr); loans = []; }
+  else{
+    loans = loanRows.map(r => ({
+      id: r.id, itemId: r.item_id, itemRef: r.item_ref, itemName: r.item_name,
+      borrower: r.borrower, qty: r.qty, date: r.date
+    }));
+  }
 
-        if (id) {
-          const { error } = await supabaseClient
-            .from("items")
-            .update({
-              name,
-              category,
-              location,
-              qty,
-              min,
-              notes,
-              consumable,
-            })
-            .eq("id", id);
-          if (error) {
-            console.error("Update failed", error);
-            return;
-          }
-          const it = items.find((i) => i.id === id);
-          if (it) {
-            it.name = name;
-            it.category = category;
-            it.location = location;
-            it.qty = qty;
-            it.min = min;
-            it.notes = notes;
-            it.consumable = consumable;
-          }
-        } else {
-          const newItem = {
-            id:
-              "itm-" +
-              Date.now() +
-              "-" +
-              Math.random().toString(36).slice(2, 7),
-            ref: nextRef(category),
-            name,
-            category,
-            location,
-            qty,
-            min,
-            notes,
-            consumable,
-          };
-          const { error } = await supabaseClient.from("items").insert(newItem);
-          if (error) {
-            console.error("Insert failed", error);
-            return;
-          }
-          items.push(newItem);
-        }
-        render();
-        itemModal.hide();
-      }
+  const { data: adminRow } = await supabaseClient
+    .from('admin_settings').select('password_hash').eq('id', 1).maybeSingle();
+  adminHash = adminRow ? adminRow.password_hash : null;
+}
 
-      async function adjustQty(id, delta) {
-        const it = items.find((i) => i.id === id);
-        if (!it) return;
-        const newQty = Math.max(0, Number(it.qty || 0) + delta);
-        const { error } = await supabaseClient
-          .from("items")
-          .update({ qty: newQty })
-          .eq("id", id);
-        if (error) {
-          console.error("Quantity update failed", error);
-          return;
-        }
-        it.qty = newQty;
-        render();
-      }
+function subscribeToChanges(){
+  if(!supabaseClient) return;
+  supabaseClient
+    .channel('parts-bench-changes')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'items' }, async () => {
+      await loadData(); render();
+    })
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'loans' }, async () => {
+      await loadData(); render();
+    })
+    .subscribe();
+}
 
-      async function deleteItem(id) {
-        if (!isAdmin) return;
-        const it = items.find((i) => i.id === id);
-        if (!it) return;
-        if (!confirm(`Remove ${it.ref} — ${it.name} from inventory?`)) return;
-        const { error } = await supabaseClient
-          .from("items")
-          .delete()
-          .eq("id", id);
-        if (error) {
-          console.error("Delete failed", error);
-          return;
-        }
-        items = items.filter((i) => i.id !== id);
-        render();
-      }
+async function hashPassword(pw){
+  const enc = new TextEncoder().encode(pw);
+  const buf = await crypto.subtle.digest('SHA-256', enc);
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
 
-      document.getElementById("searchInput").addEventListener("input", render);
-      document
-        .getElementById("categoryFilter")
-        .addEventListener("change", render);
-      document
-        .getElementById("statusFilter")
-        .addEventListener("change", render);
-      document.getElementById("fPassword").addEventListener("keydown", (e) => {
-        if (e.key === "Enter") submitLogin();
-      });
+function openLoginModal(){
+  if(!checkConfigured()) return;
+  document.getElementById('fPassword').value = '';
+  document.getElementById('loginError').classList.add('d-none');
+  if(adminHash){
+    document.getElementById('loginModalTitle').textContent = 'Admin login';
+    document.getElementById('loginModalHint').textContent = 'Enter the admin password to add, edit, or delete items.';
+    document.getElementById('passwordFieldLabel').textContent = 'Password';
+    document.getElementById('loginSubmitBtn').textContent = 'Log in';
+  }else{
+    document.getElementById('loginModalTitle').textContent = 'Set admin password';
+    document.getElementById('loginModalHint').textContent = 'No admin password is set yet. Choose one now — anyone with it will be able to add, edit, or delete items.';
+    document.getElementById('passwordFieldLabel').textContent = 'New password';
+    document.getElementById('loginSubmitBtn').textContent = 'Set password and log in';
+  }
+  loginModal.show();
+}
 
-      (async function init() {
-        itemModal = new bootstrap.Modal(document.getElementById("itemModal"));
-        borrowModal = new bootstrap.Modal(
-          document.getElementById("borrowModal"),
-        );
-        loginModal = new bootstrap.Modal(document.getElementById("loginModal"));
-        populateCategoryFilter();
-        if (checkConfigured()) {
-          await loadData();
-          subscribeToChanges();
-        }
-        render();
-      })();
-    </script>
-  </body>
+async function submitLogin(){
+  const pw = document.getElementById('fPassword').value;
+  const errorEl = document.getElementById('loginError');
+  if(!pw){
+    errorEl.textContent = 'Enter a password.';
+    errorEl.classList.remove('d-none');
+    return;
+  }
+
+  if(!adminHash){
+    const newHash = await hashPassword(pw);
+    const { error } = await supabaseClient
+      .from('admin_settings').upsert({ id: 1, password_hash: newHash });
+    if(error){
+      errorEl.textContent = 'Could not save password — check your Supabase setup.';
+      errorEl.classList.remove('d-none');
+      return;
+    }
+    adminHash = newHash;
+    isAdmin = true;
+    document.body.classList.add('is-admin');
+    render();
+    loginModal.hide();
+    return;
+  }
+
+  const attemptHash = await hashPassword(pw);
+  if(attemptHash === adminHash){
+    isAdmin = true;
+    document.body.classList.add('is-admin');
+    render();
+    loginModal.hide();
+  }else{
+    errorEl.textContent = 'Incorrect password.';
+    errorEl.classList.remove('d-none');
+  }
+}
+
+function logoutAdmin(){
+  isAdmin = false;
+  document.body.classList.remove('is-admin');
+  render();
+}
+
+function nextRef(category){
+  const p = PREFIX[category] || 'X';
+  const count = items.filter(i => i.ref && i.ref.startsWith(p)).length;
+  return p + (count + 1);
+}
+
+function itemStatus(item){
+  if(item.qty <= 0) return 'out';
+  if(item.qty <= item.min) return 'low';
+  return 'ok';
+}
+
+function statusLabel(s){
+  return s === 'out' ? 'Out of stock' : s === 'low' ? 'Low stock' : 'In stock';
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str || '';
+  return d.innerHTML;
+}
+
+function populateCategoryFilter(){
+  const sel = document.getElementById('categoryFilter');
+  const current = sel.value;
+  const cats = Object.keys(PREFIX);
+  sel.innerHTML = '<option value="">All categories</option>' +
+    cats.map(c => `<option value="${c}">${c}</option>`).join('');
+  sel.value = current;
+}
+
+function render(){
+  const search = document.getElementById('searchInput').value.trim().toLowerCase();
+  const catFilter = document.getElementById('categoryFilter').value;
+  const statusFilter = document.getElementById('statusFilter').value;
+
+  let filtered = items.filter(it => {
+    if(catFilter && it.category !== catFilter) return false;
+    const st = itemStatus(it);
+    if(statusFilter && st !== statusFilter) return false;
+    if(search){
+      const hay = (it.name + ' ' + it.location + ' ' + it.notes).toLowerCase();
+      if(!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  filtered.sort((a,b) => a.name.localeCompare(b.name));
+
+  const body = document.getElementById('itemsBody');
+  const empty = document.getElementById('emptyState');
+
+  if(filtered.length === 0){
+    body.innerHTML = '';
+    empty.classList.remove('d-none');
+  }else{
+    empty.classList.add('d-none');
+    body.innerHTML = filtered.map(it => {
+      const st = itemStatus(it);
+      return `
+      <tr>
+        <td><span class="ref-badge">${it.ref}</span></td>
+        <td>
+          <div class="item-name">${escapeHtml(it.name)}</div>
+          ${it.notes ? `<div class="text-secondary" style="font-size:0.78rem;">${escapeHtml(it.notes)}</div>` : ''}
+        </td>
+        <td><span class="cat-pill">${it.category}</span></td>
+        <td><span class="type-pill ${it.consumable ? 'consumable' : 'reusable'}">${it.consumable ? 'Consumable' : 'Reusable'}</span></td>
+        <td class="item-loc">${escapeHtml(it.location) || '—'}</td>
+        <td>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="adjustQty('${it.id}', -1)" aria-label="Decrease quantity"><i class="bi bi-dash"></i></button>
+            <span class="qty-val">${it.qty}</span>
+            <button class="qty-btn" onclick="adjustQty('${it.id}', 1)" aria-label="Increase quantity"><i class="bi bi-plus"></i></button>
+          </div>
+        </td>
+        <td>
+          <span class="status-${st}"><span class="status-dot"></span><span class="status-text">${statusLabel(st)}</span></span>
+        </td>
+        <td class="text-end row-actions">
+          <button class="btn btn-sm" onclick="openBorrowModal('${it.id}')" aria-label="${it.consumable ? 'Use' : 'Borrow'}" title="${it.consumable ? 'Use' : 'Borrow'}"><i class="bi bi-box-arrow-right"></i></button>
+          <button class="btn btn-sm admin-only" onclick="openEditModal('${it.id}')" aria-label="Edit"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm admin-only" onclick="deleteItem('${it.id}')" aria-label="Delete"><i class="bi bi-trash"></i></button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('statTotalItems').textContent = items.length;
+  document.getElementById('statTotalQty').textContent = items.reduce((s,i)=>s+Number(i.qty||0),0);
+  document.getElementById('statLow').textContent = items.filter(i=>itemStatus(i)==='low').length;
+  document.getElementById('statOut').textContent = items.filter(i=>itemStatus(i)==='out').length;
+
+  renderLoans();
+}
+
+function renderLoans(){
+  const section = document.getElementById('loansSection');
+  const body = document.getElementById('loansBody');
+  const countEl = document.getElementById('loansCount');
+
+  if(loans.length === 0){
+    section.classList.add('d-none');
+    body.innerHTML = '';
+    return;
+  }
+  section.classList.remove('d-none');
+  countEl.textContent = `${loans.length} active`;
+
+  const sorted = [...loans].sort((a,b) => new Date(b.date) - new Date(a.date));
+  body.innerHTML = sorted.map(l => `
+    <tr class="loan-row">
+      <td><span class="ref-badge">${l.itemRef}</span></td>
+      <td>
+        <div class="loan-borrower">${escapeHtml(l.borrower) || 'Unspecified'}</div>
+        <div class="loan-date">${escapeHtml(l.itemName)} · qty ${l.qty} · ${l.date}</div>
+      </td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-copper" onclick="returnLoan('${l.id}')">
+          <i class="bi bi-arrow-return-left me-1"></i>Return
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function openBorrowModal(id){
+  if(!checkConfigured()) return;
+  const it = items.find(i => i.id === id);
+  if(!it) return;
+  document.getElementById('borrowItemId').value = id;
+  document.getElementById('borrowItemInfo').textContent = `${it.ref} — ${it.name} · ${it.qty} in stock`;
+  document.getElementById('fBorrower').value = '';
+  document.getElementById('fBorrowQty').value = 1;
+  document.getElementById('fBorrowQty').max = it.qty;
+  document.getElementById('borrowWarning').classList.add('d-none');
+
+  if(it.consumable){
+    document.getElementById('borrowModalTitle').textContent = `Use ${it.ref} (consumable)`;
+    document.getElementById('borrowerLabel').textContent = 'Used by (optional)';
+    document.getElementById('confirmBorrowBtn').textContent = 'Confirm use';
+  }else{
+    document.getElementById('borrowModalTitle').textContent = `Borrow ${it.ref}`;
+    document.getElementById('borrowerLabel').textContent = 'Borrower';
+    document.getElementById('confirmBorrowBtn').textContent = 'Confirm borrow';
+  }
+  borrowModal.show();
+}
+
+async function confirmBorrow(){
+  const id = document.getElementById('borrowItemId').value;
+  const it = items.find(i => i.id === id);
+  if(!it) return;
+
+  const qty = Math.max(1, parseInt(document.getElementById('fBorrowQty').value) || 1);
+  const borrower = document.getElementById('fBorrower').value.trim();
+  const warning = document.getElementById('borrowWarning');
+
+  if(qty > it.qty){
+    warning.textContent = `Only ${it.qty} in stock — reduce the quantity.`;
+    warning.classList.remove('d-none');
+    return;
+  }
+
+  const newQty = it.qty - qty;
+  const { error: updErr } = await supabaseClient
+    .from('items').update({ qty: newQty }).eq('id', it.id);
+  if(updErr){ console.error('Borrow update failed', updErr); return; }
+  it.qty = newQty;
+
+  if(!it.consumable){
+    const loan = {
+      id: 'loan-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      item_id: it.id, item_ref: it.ref, item_name: it.name,
+      borrower: borrower, qty: qty, date: new Date().toISOString().slice(0,10)
+    };
+    const { error: loanErr } = await supabaseClient.from('loans').insert(loan);
+    if(!loanErr){
+      loans.push({ id: loan.id, itemId: loan.item_id, itemRef: loan.item_ref,
+        itemName: loan.item_name, borrower: loan.borrower, qty: loan.qty, date: loan.date });
+    }
+  }
+
+  render();
+  borrowModal.hide();
+}
+
+async function returnLoan(loanId){
+  const loan = loans.find(l => l.id === loanId);
+  if(!loan) return;
+  const it = items.find(i => i.id === loan.itemId);
+  if(it){
+    const newQty = it.qty + loan.qty;
+    const { error } = await supabaseClient.from('items').update({ qty: newQty }).eq('id', it.id);
+    if(!error) it.qty = newQty;
+  }
+  const { error: delErr } = await supabaseClient.from('loans').delete().eq('id', loanId);
+  if(!delErr) loans = loans.filter(l => l.id !== loanId);
+  render();
+}
+
+function clearFilters(){
+  document.getElementById('searchInput').value = '';
+  document.getElementById('categoryFilter').value = '';
+  document.getElementById('statusFilter').value = '';
+  render();
+}
+
+function openAddModal(){
+  if(!isAdmin) return;
+  document.getElementById('modalTitle').textContent = 'Add item';
+  document.getElementById('itemId').value = '';
+  document.getElementById('fName').value = '';
+  document.getElementById('fCategory').value = 'Sensor';
+  document.getElementById('fLocation').value = '';
+  document.getElementById('fQty').value = 1;
+  document.getElementById('fMin').value = 2;
+  document.getElementById('fNotes').value = '';
+  document.getElementById('fConsumable').checked = false;
+}
+
+function openEditModal(id){
+  if(!isAdmin) return;
+  const it = items.find(i => i.id === id);
+  if(!it) return;
+  document.getElementById('modalTitle').textContent = `Edit ${it.ref} — ${it.name}`;
+  document.getElementById('itemId').value = it.id;
+  document.getElementById('fName').value = it.name;
+  document.getElementById('fCategory').value = it.category;
+  document.getElementById('fLocation').value = it.location;
+  document.getElementById('fQty').value = it.qty;
+  document.getElementById('fMin').value = it.min;
+  document.getElementById('fNotes').value = it.notes;
+  document.getElementById('fConsumable').checked = !!it.consumable;
+  itemModal.show();
+}
+
+async function saveItem(){
+  if(!isAdmin) return;
+  const id = document.getElementById('itemId').value;
+  const name = document.getElementById('fName').value.trim();
+  if(!name){
+    document.getElementById('fName').focus();
+    return;
+  }
+  const category = document.getElementById('fCategory').value;
+  const location = document.getElementById('fLocation').value.trim();
+  const qty = Math.max(0, parseInt(document.getElementById('fQty').value) || 0);
+  const min = Math.max(0, parseInt(document.getElementById('fMin').value) || 0);
+  const notes = document.getElementById('fNotes').value.trim();
+  const consumable = document.getElementById('fConsumable').checked;
+
+  if(id){
+    const { error } = await supabaseClient.from('items').update({
+      name, category, location, qty, min, notes, consumable
+    }).eq('id', id);
+    if(error){ console.error('Update failed', error); return; }
+    const it = items.find(i => i.id === id);
+    if(it){
+      it.name = name; it.category = category; it.location = location;
+      it.qty = qty; it.min = min; it.notes = notes; it.consumable = consumable;
+    }
+  }else{
+    const newItem = {
+      id: 'itm-' + Date.now() + '-' + Math.random().toString(36).slice(2,7),
+      ref: nextRef(category),
+      name, category, location, qty, min, notes, consumable
+    };
+    const { error } = await supabaseClient.from('items').insert(newItem);
+    if(error){ console.error('Insert failed', error); return; }
+    items.push(newItem);
+  }
+  render();
+  itemModal.hide();
+}
+
+async function adjustQty(id, delta){
+  const it = items.find(i => i.id === id);
+  if(!it) return;
+  const newQty = Math.max(0, Number(it.qty||0) + delta);
+  const { error } = await supabaseClient.from('items').update({ qty: newQty }).eq('id', id);
+  if(error){ console.error('Quantity update failed', error); return; }
+  it.qty = newQty;
+  render();
+}
+
+async function deleteItem(id){
+  if(!isAdmin) return;
+  const it = items.find(i => i.id === id);
+  if(!it) return;
+  if(!confirm(`Remove ${it.ref} — ${it.name} from inventory?`)) return;
+  const { error } = await supabaseClient.from('items').delete().eq('id', id);
+  if(error){ console.error('Delete failed', error); return; }
+  items = items.filter(i => i.id !== id);
+  render();
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+document.getElementById('categoryFilter').addEventListener('change', render);
+document.getElementById('statusFilter').addEventListener('change', render);
+document.getElementById('fPassword').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter') submitLogin();
+});
+
+(async function init(){
+  itemModal = new bootstrap.Modal(document.getElementById('itemModal'));
+  borrowModal = new bootstrap.Modal(document.getElementById('borrowModal'));
+  loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+  populateCategoryFilter();
+  if(checkConfigured()){
+    await loadData();
+    subscribeToChanges();
+  }
+  render();
+})();
+</script>
+</body>
 </html>
